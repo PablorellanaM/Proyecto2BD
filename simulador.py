@@ -4,12 +4,13 @@ import time
 import random
 
 DB_CONFIG = {
-    'dbname': 'tu_basedatos',
-    'user': 'tu_usuario',
-    'password': 'tu_password',
+    'dbname': 'proyecto2bd',
+    'user': 'postgres',
+    'password': '1234',
     'host': 'localhost',
     'port': '5432'
 }
+
 
 # Configura aquí el nivel de aislamiento: 'READ COMMITTED', 'REPEATABLE READ', 'SERIALIZABLE'
 ISOLATION_LEVEL = 'SERIALIZABLE'
