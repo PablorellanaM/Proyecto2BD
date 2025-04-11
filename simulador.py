@@ -6,7 +6,7 @@ import random
 DB_CONFIG = {
     'dbname': 'proyecto2bd',
     'user': 'postgres',
-    'password': '1234',
+    'password': 'Pablorellana2005',
     'host': 'localhost',
     'port': '5432'
 }
