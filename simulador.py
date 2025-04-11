@@ -1,7 +1,11 @@
 import psycopg2
 import threading
 import time
-import random
+import sys
+
+# Leer parámetros desde línea de comandos
+ISOLATION_LEVEL = sys.argv[1] if len(sys.argv) > 1 else 'SERIALIZABLE'
+N_USUARIOS = int(sys.argv[2]) if len(sys.argv) > 2 else 5
 
 DB_CONFIG = {
     'dbname': 'proyecto2bd',
@@ -11,11 +15,7 @@ DB_CONFIG = {
     'port': '5432'
 }
 
-
-# Configura aquí el nivel de aislamiento: 'READ COMMITTED', 'REPEATABLE READ', 'SERIALIZABLE'
-ISOLATION_LEVEL = 'SERIALIZABLE'
-
-asiento_id = 4  # El asiento que todos intentarán reservar
+asiento_id = 4  # El asiento a reservar
 
 def reservar_asiento(usuario):
     try:
@@ -24,8 +24,6 @@ def reservar_asiento(usuario):
         cursor = conn.cursor()
 
         cursor.execute("BEGIN;")
-
-        # Bloquear el asiento que se intenta reservar
         cursor.execute("SELECT reservado FROM asientos WHERE id_asiento = %s FOR UPDATE;", (asiento_id,))
         resultado = cursor.fetchone()
 
@@ -36,13 +34,13 @@ def reservar_asiento(usuario):
             """, (asiento_id, usuario))
 
             cursor.execute("UPDATE asientos SET reservado = TRUE WHERE id_asiento = %s;", (asiento_id,))
-            print(f"[✔️] {usuario} reservó el asiento.")
+            print(f"[OK] {usuario} reservó el asiento.")
         else:
-            print(f"[❌] {usuario} no pudo reservar. Ya está ocupado.")
+            print(f"[NO] {usuario} no pudo reservar. Ya está ocupado.")
 
         conn.commit()
     except Exception as e:
-        print(f"[⚠️] Error con {usuario}: {e}")
+        print(f"[ERR] Error con {usuario}: {e}")
         conn.rollback()
     finally:
         cursor.close()
@@ -60,11 +58,9 @@ def simular_reservas(n_usuarios):
         t.join()
 
 if __name__ == "__main__":
-    usuarios_simultaneos = [5, 10, 20, 30]
+    print(f"\n--- Simulación con {N_USUARIOS} usuarios y nivel '{ISOLATION_LEVEL}' ---")
 
-    for n in usuarios_simultaneos:
-        print(f"\n🚀 Simulación con {n} usuarios y nivel '{ISOLATION_LEVEL}'")
-        # Reinicia el asiento como disponible
+    try:
         conn = psycopg2.connect(**DB_CONFIG)
         cursor = conn.cursor()
         cursor.execute("UPDATE asientos SET reservado = FALSE WHERE id_asiento = %s;", (asiento_id,))
@@ -72,6 +68,7 @@ if __name__ == "__main__":
         conn.commit()
         cursor.close()
         conn.close()
+    except Exception as e:
+        print(f"[ERR] Error al reiniciar el asiento: {e}")
 
-        simular_reservas(n)
-        time.sleep(2)
+    simular_reservas(N_USUARIOS)
