@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados de la Simulación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 30px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .linea {
+            background: #fff;
+            padding: 8px 12px;
+            border-bottom: 1px solid #ddd;
+            font-family: monospace;
+        }
+        .linea.success { color: green; }
+        .linea.fail { color: red; }
+        .linea.error { color: orange; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Resultados de la Simulación</h1>
+    {% for linea in lineas %}
+        <div class="linea 
+            {% if 'reservó' in linea %}success{% elif 'no pudo' in linea %}fail{% elif 'Error' in linea %}error{% endif %}
+        ">
+            {{ linea }}
+        </div>
+    {% endfor %}
+</body>
+</html>
