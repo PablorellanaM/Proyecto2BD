@@ -1,4 +1,4 @@
-Manual de Usuario — Simulador de Reservas Concurrentes
+Manual de usuario — simulador de reservas concurrentes
 Este sistema permite simular múltiples usuarios intentando reservar el mismo asiento en un evento, evaluando el comportamiento bajo diferentes niveles de aislamiento de transacciones en PostgreSQL.
 
 Requisitos
@@ -14,20 +14,6 @@ bash
 Copy
 Edit
 pip install flask psycopg2-binary
-
-Estructura del Proyecto
-
-graphql
-Copy
-Edit
-Proyecto2BD/
-├── app.py               # Servidor Flask para la interfaz web
-├── simulador.py         # Script de simulación con concurrencia
-├── ddl.sql              # Script para crear tablas
-├── data.sql             # Script para insertar datos de prueba
-├── templates/
-│   └── resultados.html  # Interfaz HTML con formulario y resultados
-
 Preparación de la Base de Datos
 Crear la base de datos en PostgreSQL:
 
@@ -40,9 +26,9 @@ Ejecutar el script ddl.sql para crear las tablas:
 sql
 Copy
 Edit
--- En pgAdmin o el Query Tool
--- Cargar ddl.sql
-Ejecutar data.sql para insertar el evento y asientos de prueba.
+* En pgAdmin o el Query Tool
+* Cargar ddl.sql
+* Ejecutar data.sql para insertar el evento y asientos de prueba.
 
 Cómo ejecutar la simulación
 Desde la línea de comandos:
@@ -51,9 +37,9 @@ bash
 Copy
 Edit
 python simulador.py SERIALIZABLE 10
-SERIALIZABLE → nivel de aislamiento (READ COMMITTED, REPEATABLE READ, SERIALIZABLE)
+SERIALIZABLE = nivel de aislamiento (READ COMMITTED, REPEATABLE READ, SERIALIZABLE)
 
-10 → número de usuarios simulados
+10 = número de usuarios simulados
 
 Uso desde la interfaz web
 Ejecuta el servidor Flask:
